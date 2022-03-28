@@ -6,7 +6,7 @@
 #    By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/27 18:30:13 by mahmad-j          #+#    #+#              #
-#    Updated: 2022/03/27 21:22:10 by mahmad-j         ###   ########.fr        #
+#    Updated: 2022/03/28 16:47:44 by mahmad-j         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,8 @@ CC		=	gcc
 CFLAGS	=	-Wall -Wextra -Werror
 
 all		:	server client
+
+bonus	:	server client
 
 server	:	server.o libft
 			$(CC) -o $@ $< -Llibft -lft
@@ -39,4 +41,4 @@ fclean	:	clean
 			
 re		:	fclean all
 
-.PHONY	:	all libft clean fclean re
+.PHONY	:	all bonus libft clean fclean re

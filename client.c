@@ -6,7 +6,7 @@
 /*   By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 19:04:42 by mahmad-j          #+#    #+#             */
-/*   Updated: 2022/03/27 21:12:37 by mahmad-j         ###   ########.fr       */
+/*   Updated: 2022/03/28 16:51:27 by mahmad-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,16 @@
 
 static void	handler(int	sig)
 {
-	(void)sig;
+	static int	receivedlen = 0;
+
+	if (sig == SIGUSR2)
+		++receivedlen;
+	else
+	{
+		ft_putnbr_fd(receivedlen, 1);
+		write(1, "\n", 1);
+		exit(0);
+	}
 }
 
 static void	send_msg(char *str, int spid)
@@ -37,7 +46,12 @@ static void	send_msg(char *str, int spid)
 			usleep(100);
 		}
 	}
-	exit(0);
+	i = 8;
+	while (i--)
+	{
+		kill(spid, SIGUSR2);
+		usleep(100);
+	}
 }
 
 int	main(int ac, char **av)
@@ -46,6 +60,7 @@ int	main(int ac, char **av)
 		return (1);
 	write(1, "Characters sent: ", 17);
 	ft_putnbr_fd(ft_strlen(av[2]), 1);
+	write(1, "\nCharacters received: ", 22);
 	signal(SIGUSR1, handler);
 	signal(SIGUSR2, handler);
 	send_msg(av[2], ft_atoi(av[1]));

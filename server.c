@@ -6,7 +6,7 @@
 /*   By: mahmad-j <mahmad-j@student.42kl.edu.my>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:05:01 by mahmad-j          #+#    #+#             */
-/*   Updated: 2022/03/27 21:12:27 by mahmad-j         ###   ########.fr       */
+/*   Updated: 2022/03/28 16:54:24 by mahmad-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 
 static void	act(int sig, siginfo_t *info, void *context)
 {
-	static pid_t	cpid = 0;
-	static char		c = 0;
-	static int		counter = 0;
+	static pid_t			cpid = 0;
+	static unsigned char	c = 0;
+	static int				counter = 0;
 
 	(void)context;
 	if (cpid == 0)
@@ -27,9 +27,16 @@ static void	act(int sig, siginfo_t *info, void *context)
 		c |= 1;
 	if (++counter == 8)
 	{
-		write(1, &c, 1);
 		counter = 0;
+		if (c == 0)
+		{
+			kill(cpid, SIGUSR1);
+			cpid = 0;
+			return ;
+		}
+		write(1, &c, 1);
 		c = 0;
+		kill(cpid, SIGUSR2);
 	}
 	else
 		c <<= 1;
